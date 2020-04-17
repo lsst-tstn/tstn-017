@@ -130,8 +130,15 @@ aforementioned configuration requirements, e.g.; ``settingVersions``,
 the information contained in LSE-209 :cite:`LSE-209` is insufficent to guide
 the development of the interfaces.
 
-After discussions with the different parties we arrived at the following
-agreement on how to deal with these events and satisfy the system requirements.
+The diagram in :numref:`fig-csc-start` illustrates agreed uppon the interface
+for handling CSC configuration and satisfy the system requirements.
+
+.. figure:: /_static/ConfigCSCStart.png
+   :name: fig-csc-start
+   :target: ../_images/ConfigCSCStart.png
+   :alt: Configurable CSC start process
+
+   Configurable CSC start process.
 
 settingVersions
 ^^^^^^^^^^^^^^^
@@ -189,6 +196,35 @@ the ``settingsToApply`` attribute of the ``start`` command. The CSC should
 understand how to use this label to retrieve the correct configuration. See
 caveats to this process below.
 
+Settings Applied
+^^^^^^^^^^^^^^^^
+
+The ``settingsApplied`` event is a Generic Event that is to be implemented by
+every CSC.  It currently contains two parameters: ``settingsVersion`` and
+``otherSettingsEvent``.  This event should be published between after the
+``start`` command starts and before it finishes.
+
+The ``settingsVersion`` will contain the SHA or name corresponding to the
+published configuration.
+
+The ``otherSettingsEvents`` is a comma-separated list of other specific CSC
+configuration events. This may be blank if no other specific CSC events are
+necessary. If ``otherSettingsEvents`` is not blank, then those event(s) must
+be published by the CSC alongside the ``settingsApplied`` event. The CSC is
+allowed to publish as many events as necessary to convey the information.
+
+Other Settings Applied events
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Since it is not possible to provide a generic way for CSCs to output detailed
+information about the configuration parameters they are loading, it is
+recommended to create additional events (particular to each CSC) to carry
+that information.
+
+Although it is not required, for clarity, we suggest that these events be
+preceded by ``settingsApplied`` followed by some description of the content,
+e.g., ``settingsAppliedLUT`` or ``settingsAppliedController``.
+
 Available solutions and frameworks
 ==================================
 
@@ -241,11 +277,82 @@ user can aways go back to a set of configurations.
 Camera CSCs
 -----------
 
-These CSCs will also specify a set of labels to ``recommendedSettingsLabels``. A
-given label will point to ``N`` available versions that will be published via
+These CSCs will also specify a set of labels to ``recommendedSettingsLabels``.
+A given label will point to ``N`` available versions that will be published via
 ``recommendedSettingsVersion``. As an example, if a label called ``normal`` is
 present, that label may be present as the following versions:
 ``normal-1.1``, ``normal-1.2``, ``normal-2.3``, ``normal-3.0``.
+
+Other Handcrafted CSCs
+----------------------
+
+Unfortunately, not all CSCs provided by Telescope and Site are developed with
+a framework like SalObj that handles most of the system architecture details.
+Some CSCs where developed by external vendors which did not had a framework to
+work with at the time the contract started. In other cases the CSC was
+developed in-house using a different programming language due to performance
+requirements.
+
+In these "handcrafted CSCs" the developer is in charge of constructing their
+own solution to the problem. Here we gather some information about those CSCs.
+
+M1M3
+^^^^
+
+This CSC was developed in-house using C++ before a good understanding and
+agreement of how to handle configuration was achieved. The CSC stores a
+series of configuration files which includes LUTs and other general settings.
+
+As it is the code is not following the procedure defined in this document
+though, it is being updated to make it compatible.
+
+Pointing Component
+^^^^^^^^^^^^^^^^^^
+
+The pointing component has a configuration file that resides with the code
+base which, in itself, also defines a couple different files (e.g. pointing
+model). Nevertheless, the CSC is not developed to be a configurable CSC,
+meaning it does not accept a ``settingsToApply`` value to switch between
+different configurations and does not output the required events.
+
+The CSC is being developed by Observatory Sciences using C++.
+
+M2
+^^
+
+M2 cell system will read “some” configuration files (csv files basically) in
+disk, get the LUT values from M2 control system by TCP/IP, and hard-code many
+configuration data in code.
+
+M2 control system (e.g. CSC) will read “some” configuration files (csv, tsv,
+txt) in disk and hard-code many configuration data in code. There is no
+document to say where are the hard-coded data and what are they.
+
+All configurations resides with the main code base. The CSC does not
+send any of the events required to tie in the configuration version and does
+not accept a ``settingsToApply`` value to switch between different
+configurations.
+
+
+ATMCS and ATPneumatics
+^^^^^^^^^^^^^^^^^^^^^^
+
+The ATMCS and ATPneumatics are both being developed in LabView by a
+subcontract with CTIO. Both CSCs contains a couple of ``.ini`` configuration
+files that are stored with the main code base. Neither accept a
+``settingsToApply`` value to switch between different configurations nor
+output the required events.
+
+Non-Configurable CSCs
+---------------------
+
+Some CSCs will not be configurable at all. Examples as sparse in our current
+architecture but, from Salobj point of view, a CSC can be developed on top of
+a ``BaseCSC`` which makes it a non-configurable component.
+
+A non-configurable CSC will ignore the ``settingsToApply`` attribute of the
+``start`` command, as it does not contain any true meaning to it. Likewise
+these CSCs will not output any of the configuration-related events.
 
 
 Examples
@@ -306,6 +413,11 @@ enables remote connection. Is this case, we could have something like:
 ::
 
   settingsUrl: mysql://10.0.100.104:3306/CONFIG
+
+Deriving new configuration parameters
+=====================================
+
+TBD
 
 
 .. rubric:: References
