@@ -28,7 +28,7 @@ between different sets. During commissioning and engineering runs, users will
 also be interested in building, validating and verifying new sets of
 configurations.
 
-The process of building new sets of configurations will very considerably for
+The process of building new sets of configurations will vary considerably for
 each component. In some cases, the configuration may be a simple set of
 host names and ports that the component connects to. In other cases the
 configuration may require the calculation of complex lookup tables (e.g. M1M3
@@ -339,7 +339,7 @@ ATMCS and ATPneumatics
 
 The ATMCS and ATPneumatics are both being developed in LabView by a
 subcontract with CTIO. Both CSCs contains a couple of ``.ini`` configuration
-files that are stored with the main code base. Neither accept a
+files that are stored with the main code base. Neither CSCs accept a
 ``settingsToApply`` value to switch between different configurations nor
 output the required events.
 
@@ -417,7 +417,127 @@ enables remote connection. Is this case, we could have something like:
 Deriving new configuration parameters
 =====================================
 
-TBD
+The process to derive new configuration parameters will vary considerably
+from component to component. In some cases, the configuration is simple enough
+that a change may involve simply replacing an IP or hostname value, a routine
+filter swap on an instrument or updating the limits to an axis range due to
+some evolving condition. On the other hand, in other cases, deriving new
+parameters may involve generating complex LUT that may require on sky
+observations and detailed data analysis.
+
+Following is a detail of each step of the process to update the CSC
+configuration.
+
+
+    #.  Create a Jira ticket to track the work being done. If details or
+        discussions are needed they can done using the Jira tickets itself. It
+        is also possible to link tickets which allow us to capture situations
+        where the configuration change was triggered by some issue reported in
+        a different ticket, for instance.
+    #.  For CSCs using a git repository to store configurations, e.g. all
+        Salobj CSCs, clone the configuration repository locally and create a
+        "ticket branch" to work on.
+
+        For legacy CSCs where the configuration is hosted with the main code
+        base, the process is very similar. The difference is that the
+        repository being cloned will be the main code base instead.
+
+        If the CSC uses a configuration database, make sure a snapshot of the
+        database is created and backed up before editing it.
+
+    #.  Execute the work needed to derive the new configuration parameter.
+
+        As mentioned above, in some cases, the process may be straightforward,
+        consisting simply of replacing the values of a set of parameters with
+        given values (e.g., swapping filters). In these cases, this step will
+        be simply verifying any required work was performed and continuing to
+        the next step. Jira can/should be used to track those activities.
+
+        The Jira ticket should also be used to track the work done on those
+        cases where a more involved analysis is required, e.g., in
+        dome and/or on sky data acquisition, EFD queries, data processing etc.
+        Any ancillary software or data product required during this process
+        should be properly managed using git. Any software required during
+        this process should be stored in a git repository
+        in `T&S github organization <https://github.com/orgs/lsst-ts>`__, and
+        should follow the standard `T&S development workflow
+        guidelines <https://tssw-developer.lsst.io>`__. This includes, but is
+        not limited to, EFD queries, Jupyter notebooks, other data analysis
+        routines (regardless of the programming language) and so on.
+        The preferred location for storing Jupyter notebooks is the
+        `ts_notebooks <https://github.com/lsst-ts/ts_notebooks>`__ repository.
+
+        Any intermediate data product generated in the process should also be
+        stored in the
+        `git Large File Storage <https://developer.lsst.io/git/git-lfs.html>`__
+        or, if size permits, with the software repository itself.
+
+    #.  Edit/replace the configuration file(s) or add a new file(s) to host the
+        new configuration in the CSC configuration directory. Ideally the name
+        of the file should reflect the purpose of change, dates can also be
+        used as well. Old configuration files can be kept in the repo if they
+        still represent valid configurations otherwise, they should be removed.
+        Note, though, that they will still remain available on previous
+        versions in the git repo, enabling historical comparison.
+
+        Alternatively, load the new configuration into the configuration
+        database, if that is the case for the CSC in question.
+
+    #.  Modify the configuration labels so that it maps to the new
+        configuration (preferred) or create a new label for the new
+        configuration. For Salobj CSC, this is done by editing the
+        ``_labels.yaml`` file.
+
+    #.  Commit the changes made to the configuration and push it to the
+        online repository.
+
+    #.  Testing and verification of the new configuration.
+
+        The complexity of this step will also vary considerably from component
+        to component. In some cases, it might be feasible to test the
+        configuration in the actual running CSC. For instance, in the filter
+        swap use-cases, one can simply pull the ticket branch in the CSC host
+        for testing, and exercise the CSC to verify it is working.
+
+        In other situations the new configuration can be tested and verified
+        using simulators.
+
+        Nevertheless, in some other more critical cases tests and verification
+        are only possible/feasible with on-sky operations.
+
+        Regardless of which case the CSC falls into, the approach should be to
+        run the test and verification with the repository ticket branch. If any
+        issues arises during this test the process can either continue to the
+        next phase or start over. The Jira ticket created to track the work
+        should reflect the results of any tests.
+
+    #.  Create/update related documentation.
+
+
+    #.  Create pull requests (PRs). Once the configuration is tested, verified
+        and documented, it is ready to be officially accepted.
+
+        PRs must be created for all repositories that where modified during
+        the process, including, but not limited to, the configuration
+        repository, ancillary software and documentation. The PRs will follow
+        the standard review procedure. Once the they are approved, merged and
+        released the new configuration becomes official and can be deployed.
+
+
+During commissioning we anticipate that there may be situations where quick
+configuration changes may need to be implemented. In these cases, the user
+should also create a Jira ticket (or work out of an existing ticket) to
+document the occurrence. Then, instead of checking out the repository
+locally, the user can work out of the deployed CSC configuration directly
+in the host. It is important to create a branch in place to work on and,
+later, commit-push to the repository and continue with the process
+afterwards.
+
+.. important::
+
+    Users must be aware that failing to commit-push changes done in line may
+    result in loss of information. Therefore, this procedure should be reserved
+    only for critical situations.
 
 
 .. rubric:: References
