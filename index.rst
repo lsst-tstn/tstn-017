@@ -13,8 +13,8 @@
    CSC configuration and ancillary data. The focus is on providing a basis for
    development of a unified solution on handling data that is required for
    proper operation of CSCs in view of the different requirements and
-   use-cases. After reading this document develops should be informed on how to
-   proceed in developing CSCs that confirm with the system architecture design.
+   use-cases. After reading this document developers should be informed on how to
+   proceed in developing CSCs that confirms to the system architecture design.
    Users, on the other hand, should know what to expect when interacting with
    system components, how to select a configuration for a component and, most
    importantly be aware of the process to derive new configuration parameters.
@@ -79,7 +79,7 @@ Subsystem Requirements :cite:`LSE-60` states that:
     Temperature, rate, pressure, loads, status, and conditions at all sensed
     system components.
 
-his is a broad requirement specifying that components must publish operational
+This is a broad requirement specifying that components must publish operational
 status information.
 
 .. _section-lse-62:
