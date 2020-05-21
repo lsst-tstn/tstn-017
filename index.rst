@@ -11,7 +11,7 @@
    This document is intended for both developers and users of the Vera Rubin observatory control system.
    It consolidates information about how to handle CSC configuration and ancillary data.
    The focus is on providing a basis for development of a unified solution on handling data that is required for proper operation of CSCs in view of the different requirements and use-cases.
-   After reading this document develops should be informed on how to proceed in developing CSCs that confirm with the system architecture design.
+   After reading this document developers should be informed on how to proceed in developing CSCs that conform with the system architecture design.
    Users, on the other hand, should know what to expect when interacting with system components, how to select a configuration for a component and, most importantly be aware of the process to derive new configuration parameters.
 
 
@@ -403,7 +403,7 @@ The following is a renaming suggestion for discussion:
 Continuous monitoring configuration repository
 ----------------------------------------------
 
-Right now CSCs are required to publish ``configurationsAvailable``  (former ``settingsVersions``, see :ref:`section-renaming`) when they transition to ``STANDBY`` state.
+Right now CSCs are required to publish ``configurationsAvailable``  (former ``settingsVersions``, see :ref:`renaming proposal <section-renaming>`) when they transition to ``STANDBY`` state.
 Nevertheless, while in ``STANDBY`` state it is possible for someone to update the available configuration, which would make the information out of sync.
 We propose that, while in ``STANDBY`` state, CSCs continuously monitor the configuration repository and update the information if needed.
 If an invalid configuration is made available while the CSC is in ``STANDBY`` the CSC should transition to ``FAULT`` state.
@@ -428,7 +428,7 @@ The proposal to improve this aspect of the system is:
 #.  On the configuration repository there must be a ``_base.yaml`` file defining all the base configuration values (we use "base" instead of "default").
 #.  The labels file (e.g. ``_labels.yaml``) will continue to exist with the same format and purpose.
 #.  Additional configuration files can provide new values for individual configuration parameters.
-#.  If a CSC receives a ``start`` command with an empty ``configuration`` (see :ref:`<section-renaming>`) attribute, it will load the values in ``base.yaml``.
+#.  If a CSC receives a ``start`` command with an empty ``configuration`` (see :ref:`renaming proposal <section-renaming>`) attribute, it will load the values in ``base.yaml``.
 #.  If a CSC receives a ``start`` command with a ``configuration`` attribute equal to a label in ``_labels.yaml``, it will load the values in ``base.yaml`` first and override those values defined in the mapped configuration file.
 #.  The name ``default`` should not be used for labels.
 
