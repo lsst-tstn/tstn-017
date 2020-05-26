@@ -375,7 +375,7 @@ Other :ref:`handcrafted CSCs <section-handcrafted>` are encouraged to follow thi
 As described :ref:`above <section-salobj>`, CSCs written with Salobj define a configuration schema (e.g. `ts_atdome <https://github.com/lsst-ts/ts_ATDome/blob/develop/schema/ATDome.yaml>`__).
 The configuration schema contains default values for the configuration which are loaded if the ``start`` command is sent with an empty ``configuration`` attribute (the default value).
 Nevertheless, the values in the schema are seldom valid beyond a unit testing environment, which requires users to provide some kind of *operational defaults* or *default label*.
-One can see how this can cause confusion when operating the system since now "default" has two different meaning, e.g.; *schema default* and *operational default*.
+One can see how this can cause confusion when operating the system since now "default" has two different meanings, e.g.; *schema default* and *operational default*.
 Furthermore, it is usually enough to override a small subset of the *schema defaults* for operations.
 Therefore, to get a full set of applied configurations, users must look at two distinct repositories; the configuration repository (for the modified parameters) and the CSC repository (for the schema defaults).
 
@@ -388,8 +388,7 @@ The proposal to improve this aspect of the system is:
 #.  If a CSC receives a ``start`` command with an empty ``configuration`` (see :ref:`renaming proposal <section-renaming>`) attribute, it will load the values in ``base.yaml``.
 #.  If a CSC receives a ``start`` command with a ``configuration`` attribute equal to a label in ``_labels.yaml``, it will load the values in ``base.yaml`` first and override those values defined in the mapped configuration file.
 #.  The name ``default`` should not be used for labels.
-#.  Remove implicit configuration feature.
-    All valid configurations should have a label.
+#.  All valid configurations must have a label to be loaded by the CSC.
     Configurations will not be loaded by filename.
 #.  The configuration repository should be kept clean of configurations used for unit testing or for different purposes (e.g. test stand configurations).
     Configurations tailored for test stand can be kept in different branches/tags.
