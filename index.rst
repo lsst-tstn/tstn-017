@@ -28,69 +28,12 @@ During commissioning and engineering runs, users will also be interested in buil
 
 The process of building new sets of configurations will vary considerably for each component.
 In some cases, the configuration may be a simple set of host names and ports that the component connects to.
-In other cases the configuration may require the calculation of complex lookup tables (e.g. M1M3 and M2) or model coefficients (e.g. pointing component), probably requiring on-sky time for acquiring the data, and complex software to analyze and derive the configuration products.
+In other cases, the configuration may require the calculation of complex lookup tables (e.g. M1M3 and M2) or model coefficients (e.g. pointing component), probably requiring on-sky time for acquiring the data, and complex software to analyze and derive the configuration products.
 
-Verification of a new configuration, in this context, mainly involves the process of guaranteeing that the configuration has the correct schema; the input values have the correct types and respect any specified range.
-Validating that a configuration is good for operation is a much more involved procedure and may require on-sky time.
+Verification of a new configuration, in this context, mainly involves the process of guaranteeing that the configuration has the correct schema, the input values have the correct types and respect any specified range.
+Validating that a configuration is acceptable for operation is a much more involved procedure and may require on-sky time.
 
 In this tech-note we specify how components deal with these different aspects of configuration and the basics procedures required to build and update them.
-
-.. _section-system-requirements:
-
-System Requirements
-===================
-
-These are the collection of requirement documents and the requirements that drives the discussion of this tech-note.
-
-.. _section-lse-60:
-
-LSE-60
-------
-
-Requirement TLS-REQ-0065, in section 2.8.1.3 from the Telescope & Site Subsystem Requirements :cite:`LSE-60` states that:
-
-    The Telescope and Site shall publish telemetry using the Observatory specified protocol (Document-2233) containing time stamped structures of all command-response pairs and all technical data streams including hardware health, and status information.
-    The telemetry shall include all required information (metadata) needed for the scientific analysis of the survey data as well as, at a minimum, the following:
-    Changes in the internal state of the system, Health and status of operating systems, and Temperature, rate, pressure, loads, status, and conditions at all sensed system components.
-
-This is a broad requirement specifying that components must publish operational status information.
-
-.. _section-lse-62:
-
-LSE-62
-------
-
-The LSST Observatory Control System Requirements Document :cite:`LSE-62` contains three requirements regarding system configuration:
-
-Requirement OCS-REQ-0045 in section 3.4.4 (Subsystem Latest Configuration) states that:
-
-        Specification: The Configuration Database shall manage the latest configuration for each subsystem, for the different observing modes.
-
-        Discussion: The Configuration Database maintains also the latest configuration utilized during operations that can be utilized for rapid restoration of service in case of failure.
-
-Requirement OCS-REQ-0069 in section 3.4.4.1 (Subsystem Parameters) state that:
-
-    Specification: The Configuration Database shall manage the subsystem parameters for the different observing modes.
-
-Requirement OCS-REQ-0070 in section 3.4.4.2 (Subsystem History) state that:
-
-    Specification: The Configuration Database shall manage subsystem history for the different observing modes.
-
-See furthermore details about the adopted definition of "configuration database" in the context of the control software architecture and more details about the proposed implementation.
-
-.. _section-lse-150:
-
-LSE-150
--------
-
-Section 2.4 of the LSST Control Software Architecture :cite:`LSE-150` describes how to perform configuration management.
-The document provides two valid alternatives for managing configuration in the LSST system; through a configuration database or version control system.
-
-For a configuration database, any solution is acceptable as long as the technology allows versioning of the database.
-
-For version control systems the adopted solution is `git <https://git-scm.com>`__.
-The document also specifies that configurations must be stored in a separate repository from that of the component source code, to allow the configuration to evolve independently of the main code base.
-The configuration for different components can be stored individually or in groups of components to facilitate maintainance.
 
 .. _section-interface-definition:
 
@@ -101,7 +44,9 @@ Interface definition
 
 	This section describe the current implementation of the system.
 
-Assuming the architecture specified in LSE-150 :cite:`LSE-150` for the configuration system (database or version controlled), we must now make sure enough information is captured to satisfy the traceability requirements specified in LSE-62 :cite:`LSE-62`.
+A description of the requirements used to guide this discussion is shown in :ref:`section-system-requirements`.
+
+Based on the architecture specified in :ref:`LSE-150 <section-lse-150>` :cite:`LSE-150` for the configuration system (database or version controlled), we must now make sure enough information is captured to satisfy the traceability requirements specified in :ref:`LSE-62 <section-lse-62>` :cite:`LSE-62`.
 
 LSE-209 :cite:`LSE-209` specifies the global interface a component must implement to be a valid resource of the system, including a set of events to satisfy the aforementioned configuration requirements, e.g.; ``settingVersions`` and ``settingsApplied`` events.
 At the time of this writing, the information contained in LSE-209 :cite:`LSE-209` is insufficient to guide the development of the interfaces.
@@ -130,7 +75,7 @@ Any changes in the configuration repository or database should produce a new ver
 The ``settingsUrl`` attribute is a URL indicating how the CSC connects to its settings.
 It will start with "file:" if it is a clone of a git repo, or the standard URL, if a database.
 
-The ``recommendedSettingsLabels`` will contain a comma separated list of labels, each label maps to a configuration.
+The ``recommendedSettingsLabels`` contain a comma separated list of labels, each label maps to a configuration.
 The same label can point to different name/version pair over time.
 This information should be available in the CSC configuration repository or database and must match the value in ``recommendedSettingsLabels`` published to SAL.
 Labels must be human readable strings that clearly state the purpose of that configuration (e.g. current, nighttime, daytime).
@@ -284,7 +229,7 @@ Telescope and Site developers are working to update the M2 controller to fix the
 ATMCS and ATPneumatics
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The ATMCS and ATPneumatics are both being developed in LabView by a subcontract with CTIO.
+The ATMCS and ATPneumatics are both being developed in LabVIEW by a subcontract with CTIO.
 Both CSCs contain a couple of ``.ini`` configuration files that are stored with the main code base.
 Neither CSC accepts a ``settingsToApply`` value to switch between different configurations nor outputs the required events.
 
@@ -299,7 +244,7 @@ Examples are sparse in our current architecture but, the from Salobj point of vi
 A non-configurable CSC will ignore the ``settingsToApply`` attribute of the ``start`` command, as it does not contain any true meaning to it.
 Likewise these CSCs will not output any of the configuration-related events.
 
-As can be seen from previous sections, most of the :ref:`handcrafted CSCs <section-handcrafted>` written in C++ or LabView are not "Configurable CSCs", in the sense that they either ignore the ``settingsToApply`` value on the ``start`` command or does not output all the appropriate events.
+As can be seen from previous sections, most of the :ref:`handcrafted CSCs <section-handcrafted>` written in C++ or LabVIEW are not "Configurable CSCs", in the sense that they either ignore the ``settingsToApply`` value on the ``start`` command or does not output all the appropriate events.
 
 .. _section-examples:
 
@@ -361,7 +306,7 @@ Proposal for improvements
 =========================
 
 The sections above describes the implementation of how CSC configuration is handled by the system, at the time of this writing.
-During initial integration and tests we realized that the solution has some critical points and, as such, we would like to address them.
+During initial integration and tests we realized that the solution has some critical weaknesses that we need to address.
 This section describes some of the issues we found and propose changes to the system to improve the user experience and system reliability.
 
 The following should be seen as an open floor for discussions and we expect developers and users to comment and provide feedback before we can start implementation.
@@ -375,9 +320,16 @@ Topics/attributes renaming
 
 The interface would be much clear if we rename some generic topics and attributes to reflect more closely their true meaning.
 
+For instance, one of the things to point out is the use of words like "recommended" and "settings" in attributes that are related to configuration information.
+Users will usually count on being able to easily enable a component with appropriate defaults first and then, what different configurations they have available to fine tune the behavior of the system.
+The use of *recommended* gives the impression that not everything that is shown is what is available (which is true in some cases), and also means users must look into the configuration repository to know what else is available.
+On the other hand *settings* really seems like a misnomer for *configuration*.
+
 The following is a renaming suggestion for discussion:
 
-#.  Rename ``settingsVersions`` to ``configurationsAvailable``
+#.  Rename ``settingsVersions`` to ``configurationsAvailable``.
+
+    This topic presents **all** the available configurations that can be loaded by the CSC (see :ref:`the proposal <section-default-configuration>` to change the way CSC handles configuration).
 
     #.  Rename ``recommendedSettingsLabels`` to ``labels``.
     #.  Rename ``recommendedSettingsVersion`` to ``versions``.
@@ -386,7 +338,7 @@ The following is a renaming suggestion for discussion:
         For a configuration repository ``mapping`` will reflect the content of the ``_labels.yaml`` file.
         For a configuration database ``mapping`` will explicitly show the mapping of ``label`` to ``label:version``.
 
-#. Rename ``settingsApplied`` to ``configurationApplied``
+#.  Rename ``settingsApplied`` to ``configurationApplied``
 
     #.  Add ``label``.
     #.  Add ``version``.
@@ -394,9 +346,11 @@ The following is a renaming suggestion for discussion:
     #.  Add ``url``.
     #.  Rename ``otherSettingsEvent`` -> ``otherInfo``.
 
-  The event will publish the selected values once the CSC is configured.
+    The event will publish the selected values once the CSC is configured.
 
-#. In the ``start`` command, rename attribute ``settingsToApply`` to ``configuration``.
+#.  In the ``start`` command, rename attribute ``settingsToApply`` to ``configuration``.
+
+
 
 .. _section-continuous-monitoring:
 
@@ -406,7 +360,9 @@ Continuous monitoring configuration repository
 Right now CSCs are required to publish ``configurationsAvailable``  (former ``settingsVersions``, see :ref:`renaming proposal <section-renaming>`) when they transition to ``STANDBY`` state.
 Nevertheless, while in ``STANDBY`` state it is possible for someone to update the available configuration, which would make the information out of sync.
 We propose that, while in ``STANDBY`` state, CSCs continuously monitor the configuration repository and update the information if needed.
-If an invalid configuration is made available while the CSC is in ``STANDBY`` the CSC should transition to ``FAULT`` state.
+If an invalid configuration is made available while the CSC is in ``STANDBY`` the CSC should transition to ``FAULT`` state and publish an appropriate error message saying which file caused the issue and how to resolve it.
+This monitoring should only happen while the CSC is in ``STANDBY`` and should not interfere with any other state.
+For instance, when transitioning from ``DISABLE`` to ``STANDBY``, the CSC shall not start monitoring until the transition is completed and the command acknowledged.
 
 .. _section-default-configuration:
 
@@ -419,7 +375,8 @@ Other :ref:`handcrafted CSCs <section-handcrafted>` are encouraged to follow thi
 As described :ref:`above <section-salobj>`, CSCs written with Salobj define a configuration schema (e.g. `ts_atdome <https://github.com/lsst-ts/ts_ATDome/blob/develop/schema/ATDome.yaml>`__).
 The configuration schema contains default values for the configuration which are loaded if the ``start`` command is sent with an empty ``configuration`` attribute (the default value).
 Nevertheless, the values in the schema are seldom valid beyond a unit testing environment, which requires users to provide some kind of *operational defaults* or *default label*.
-At the same time, overriding only a small subset of the *schema defaults* is usually enough for operations.
+One can see how this can cause confusion when operating the system since now "default" has two different meaning, e.g.; *schema default* and *operational default*.
+Furthermore, it is usually enough to override a small subset of the *schema defaults* for operations.
 Therefore, to get a full set of applied configurations, users must look at two distinct repositories; the configuration repository (for the modified parameters) and the CSC repository (for the schema defaults).
 
 The proposal to improve this aspect of the system is:
@@ -431,6 +388,71 @@ The proposal to improve this aspect of the system is:
 #.  If a CSC receives a ``start`` command with an empty ``configuration`` (see :ref:`renaming proposal <section-renaming>`) attribute, it will load the values in ``base.yaml``.
 #.  If a CSC receives a ``start`` command with a ``configuration`` attribute equal to a label in ``_labels.yaml``, it will load the values in ``base.yaml`` first and override those values defined in the mapped configuration file.
 #.  The name ``default`` should not be used for labels.
+#.  Remove implicit configuration feature.
+    All valid configurations should have a label.
+    Configurations will not be loaded by filename.
+#.  The configuration repository should be kept clean of configurations used for unit testing or for different purposes (e.g. test stand configurations).
+    Configurations tailored for test stand can be kept in different branches/tags.
+    Configurations needed for unit testing should be added to the ``test`` directory in the CSC repository and use the override feature in CSCs (see `Salobj documentation <https://ts-salobj.lsst.io>`__).
+#.  All configuration files should have a header explaining that they are loading basic values from ``_base.yaml``.
+
+.. _section-system-requirements:
+
+Appendix: System Requirements
+=============================
+
+These are the collection of requirement documents and the requirements that drives the discussion of this tech-note.
+
+.. _section-lse-60:
+
+LSE-60
+------
+
+Requirement TLS-REQ-0065, in section 2.8.1.3 from the Telescope & Site Subsystem Requirements :cite:`LSE-60` states that:
+
+    The Telescope and Site shall publish telemetry using the Observatory specified protocol (Document-2233) containing time stamped structures of all command-response pairs and all technical data streams including hardware health, and status information.
+    The telemetry shall include all required information (metadata) needed for the scientific analysis of the survey data as well as, at a minimum, the following:
+    Changes in the internal state of the system, Health and status of operating systems, and Temperature, rate, pressure, loads, status, and conditions at all sensed system components.
+
+This is a broad requirement specifying that components must publish operational status information.
+
+.. _section-lse-62:
+
+LSE-62
+------
+
+The LSST Observatory Control System Requirements Document :cite:`LSE-62` contains three requirements regarding system configuration:
+
+Requirement OCS-REQ-0045 in section 3.4.4 (Subsystem Latest Configuration) states that:
+
+        Specification: The Configuration Database shall manage the latest configuration for each subsystem, for the different observing modes.
+
+        Discussion: The Configuration Database maintains also the latest configuration utilized during operations that can be utilized for rapid restoration of service in case of failure.
+
+Requirement OCS-REQ-0069 in section 3.4.4.1 (Subsystem Parameters) state that:
+
+    Specification: The Configuration Database shall manage the subsystem parameters for the different observing modes.
+
+Requirement OCS-REQ-0070 in section 3.4.4.2 (Subsystem History) state that:
+
+    Specification: The Configuration Database shall manage subsystem history for the different observing modes.
+
+See furthermore details about the adopted definition of "configuration database" in the context of the control software architecture and more details about the proposed implementation.
+
+.. _section-lse-150:
+
+LSE-150
+-------
+
+Section 2.4 of the LSST Control Software Architecture :cite:`LSE-150` describes how to perform configuration management.
+The document provides two valid alternatives for managing configuration in the LSST system; through a configuration database or version control system.
+
+For a configuration database, any solution is acceptable as long as the technology allows versioning of the database.
+
+For version control systems the adopted solution is `git <https://git-scm.com>`__.
+The document also specifies that configurations must be stored in a separate repository from that of the component source code, to allow the configuration to evolve independently of the main code base.
+The configuration for different components can be stored individually or in groups of components to facilitate maintainance.
+
 
 
 .. rubric:: References
