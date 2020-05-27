@@ -4,7 +4,7 @@
 # Seeing was very dynamic so expect these values to have errors, exercise will need repeating.
 # Grating offsets assume focusing at filter central wavelengths
 # IMPORTANT: The configuration for this CSC uses the values declared in this file. Any values not explicitly
-#            declared are adopted from the base.yaml file. Users are expected to only include changes from
+#            declared here adopted from the _base.yaml file. Users are expected to only include changes from
 #            the base configuration in this file.
 filters:
    filter_name:
