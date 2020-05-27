@@ -382,18 +382,27 @@ Therefore, to get a full set of applied configurations, users must look at two d
 The proposal to improve this aspect of the system is:
 
 #.  Remove default values from the configuration schema.
-#.  On the configuration repository there must be a ``_base.yaml`` file defining all the base configuration values (we use "base" instead of "default").
-#.  The labels file (e.g. ``_labels.yaml``) will continue to exist with the same format and purpose.
+
+    - See this :download:`example schema <_static/ATSpectrograph_schema.yaml>` for the ATSpectrograph CSC.
+
+#.  On the configuration repository there shall be a ``_base.yaml`` file defining all the base configuration values (we use "base" instead of "default").
+
+    - See this :download:`example _base.yaml <_static/_base.yaml>` for the ATSpectrograph CSC.
+
+#.  The labels file (e.g. ``_labels.yaml``) shall continue to exist with the same format and purpose.
 #.  Additional configuration files can provide new values for individual configuration parameters.
-#.  If a CSC receives a ``start`` command with an empty ``configuration`` (see :ref:`renaming proposal <section-renaming>`) attribute, it will load the values in ``base.yaml``.
-#.  If a CSC receives a ``start`` command with a ``configuration`` attribute equal to a label in ``_labels.yaml``, it will load the values in ``base.yaml`` first and override those values defined in the mapped configuration file.
-#.  The name ``default`` should not be used for labels.
-#.  All valid configurations must have a label to be loaded by the CSC.
-    Configurations will not be loaded by filename.
+
+    - See this :download:`example configuration file <_static/ATSpectrograph_example_config.yaml>` for the ATSpectrograph CSC.
+
+#.  If a CSC receives a ``start`` command with an empty ``configuration`` (see :ref:`renaming proposal <section-renaming>`) attribute, it shall load the values in ``_base.yaml``.
+#.  If a CSC receives a ``start`` command with a ``configuration`` attribute equal to a label in ``_labels.yaml``, it shall load the values in ``_base.yaml`` first and override those values defined in the mapped configuration file.
+#.  The name ``default`` shall not be used for labels.
+#.  All valid configurations shall have a label to be loaded by the CSC.
+    Configurations cannot be loaded by filename.
 #.  The configuration repository should be kept clean of configurations used for unit testing or for different purposes (e.g. test stand configurations).
     Configurations tailored for test stand can be kept in different branches/tags.
-    Configurations needed for unit testing should be added to the ``test`` directory in the CSC repository and use the override feature in CSCs (see `Salobj documentation <https://ts-salobj.lsst.io>`__).
-#.  All configuration files should have a header explaining that they are loading basic values from ``_base.yaml``.
+    Configurations needed for unit testing shall be added to the ``test`` directory in the CSC repository and use the override feature in CSCs (see `Salobj documentation <https://ts-salobj.lsst.io>`__).
+#.  All configuration files shall have a header explaining that they are loading basic values from ``_base.yaml``, as shown in the :download:`example configuration file <_static/ATSpectrograph_example_config.yaml>` mentioned above.
 
 .. _section-system-requirements:
 

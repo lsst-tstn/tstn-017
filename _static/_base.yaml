@@ -1,0 +1,40 @@
+# This is the base (and therefore default) configuration to be used by the ATSpectrograph.
+# Ticket used to create/modify this file: DM-24808
+# Date created: 2020-05-24
+# Modification Performed: Updated IP address based on new networking layout.
+# Description:
+# Contains all parameters for ATSpectrograph, the values expected to change the most regularly are the
+# filter and disperser properties. Description of each property is found with the schema located in the ts_atspec CSC repository.
+
+instrument_port: 2
+host: 139.229.170.44
+port: 9999
+max_pos: 74
+tolerance: 0.01
+filters:
+   filter_name:
+      - empty_1
+      - empty_2
+      - BG40
+      - RG610
+   filter_central_wavelength:
+      - 700
+      - 700
+      - 450
+      - 840
+   filter_focus_offset:
+      - 0.00
+      - 0.00
+      - -0.019
+      - -0.016
+gratings:
+   grating_name:
+      - empty_1
+      - ronchi90lpmm
+      - empty_3
+      - empty_4
+   grating_focus_offset:
+      - 0.0
+      - -0.026
+      - 0.0
+      - 0.0
