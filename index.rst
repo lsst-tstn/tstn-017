@@ -42,7 +42,7 @@ Interface definition
 
 .. note::
 
-	This section describe the current implementation of the system.
+	This section describes the current implementation of the system.
 
 A description of the requirements used to guide this discussion is shown in :ref:`section-system-requirements`.
 
@@ -229,7 +229,7 @@ Telescope and Site developers are working to update the M2 controller to fix the
 ATMCS and ATPneumatics
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The ATMCS and ATPneumatics are both being developed in LabVIEW by a subcontract with CTIO.
+The ATMCS and ATPneumatics are both being developed in LabVIEW under a subcontract with CTIO.
 Both CSCs contain a couple of ``.ini`` configuration files that are stored with the main code base.
 Neither CSC accepts a ``settingsToApply`` value to switch between different configurations nor outputs the required events.
 
@@ -381,15 +381,19 @@ Therefore, to get a full set of applied configurations, users must look at two d
 
 The proposal to improve this aspect of the system is:
 
-#.  Remove default values from the configuration schema.
+#.  Default values remain in the configuration schema.
 
     - See this :download:`example schema <_static/ATSpectrograph_schema.yaml>` for the ATSpectrograph CSC.
+    - Enables simple schema evolution without requiring an immediate change to the configuration package
+    - Schema defaults remain beneficial for testing and can hold true values that are unlikely to change
 
 #.  On the configuration repository there shall be a ``_base.yaml`` file defining all the base configuration values (we use "base" instead of "default").
 
     - See this :download:`example _base.yaml <_static/_base.yaml>` for the ATSpectrograph CSC.
+    - Ensures that all parameters are loaded from the same package
 
 #.  The labels file (e.g. ``_labels.yaml``) shall continue to exist with the same format and purpose.
+
 #.  Additional configuration files can provide new values for individual configuration parameters.
 
     - See this :download:`example configuration file <_static/ATSpectrograph_example_config.yaml>` for the ATSpectrograph CSC.
@@ -402,7 +406,7 @@ The proposal to improve this aspect of the system is:
 #.  The configuration repository should be kept clean of configurations used for unit testing or for different purposes (e.g. test stand configurations).
     Configurations tailored for test stand can be kept in different branches/tags.
     Configurations needed for unit testing shall be added to the ``test`` directory in the CSC repository and use the override feature in CSCs (see `Salobj documentation <https://ts-salobj.lsst.io>`__).
-#.  All configuration files shall have a header explaining that they are loading basic values from ``_base.yaml``, as shown in the :download:`example configuration file <_static/ATSpectrograph_example_config.yaml>` mentioned above.
+#.  All configuration files shall have a header metadata fields explaining that they are loading basic values from ``_base.yaml``, as shown in the :download:`example configuration file <_static/ATSpectrograph_example_config.yaml>` mentioned above.
 
 .. _section-system-requirements:
 

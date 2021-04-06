@@ -1,11 +1,14 @@
 # This is the base (and therefore default) configuration to be used by the ATSpectrograph.
-# Ticket used to create/modify this file: DM-24808
-# Date created: 2020-05-24
-# Modification Performed: Updated IP address based on new networking layout.
-# Description:
-# Contains all parameters for ATSpectrograph, the values expected to change the most regularly are the
-# filter and disperser properties. Description of each property is found with the schema located in the ts_atspec CSC repository.
+# This piece contains metadata about the schema itself
+ticket: DM-24808
+date_created: 2020-05-24
+version: v3
+modifications : Added central wavelength attribute in filters
+description: >-
+   Contains all parameters for ATSpectrograph, the values expected to change the most regularly are the filter and disperser properties.
+   Description of each property is found with the schema located in the ts_atspec CSC repository.
 
+# Below is all of the configurable parameters
 instrument_port: 2
 host: 139.229.170.44
 port: 9999
