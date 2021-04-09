@@ -8,27 +8,21 @@ properties:
   instrument_port:
     description: The port on which the instrument mounted on the telescope
     type: number
-    default: 2
   host:
     description: IP of the controller
     type: string
-    default: 1.0.0.127
   port:
     decription: Port for the controller
     type: integer
-    default: 21
   min_pos:
     decription: Minimum position for the linear stage (in mm).
     type: number
-    default: 0
   max_pos:
     decription: Maximum position for the linear stage (in mm).
     type: number
-    default: 65
   tolerance:
     decription: Tolerance for positioning the linear stage.
     type: number
-    default: 0.01
 
   filters:
     type: object
@@ -39,7 +33,6 @@ properties:
         uniqueItems: true
         items:
           type: string
-        default: [empty_1, empty_2, empty_3, empty_4]
         minItems: 4
         maxItems: 4
 
@@ -50,7 +43,6 @@ properties:
         type: array
         items:
           type: number
-        default: [700, 700, 700, 700]
         minItems: 4
         maxItems: 4
 
@@ -63,7 +55,6 @@ properties:
         uniqueItems: false
         items:
           type: number
-        default: [0, 0, 0, 0]
         minItems: 4
         maxItems: 4
 
@@ -79,7 +70,6 @@ properties:
             uniqueItems: false
             items:
               type: number
-            default: [0, 0, 0, 0]
             minItems: 4
             maxItems: 4
             description: X-offset in arcseconds.
@@ -88,7 +78,6 @@ properties:
             uniqueItems: false
             items:
               type: number
-            default: [0, 0, 0, 0]
             minItems: 4
             maxItems: 4
             description: Y-offset in arcseconds.
@@ -103,7 +92,6 @@ properties:
         uniqueItems: true
         items:
           type: string
-        default: [empty_1, empty_2, empty_3, empty_4]
         minItems: 4
         maxItems: 4
       offset_focus_grating:
@@ -115,7 +103,6 @@ properties:
         uniqueItems: false
         items:
           type: number
-        default: [0, 0, 0, 0]
         minItems: 4
         maxItems: 4
       offset_pointing_grating:
@@ -130,7 +117,6 @@ properties:
             uniqueItems: false
             items:
               type: number
-            default: [0, 0, 0, 0]
             minItems: 4
             maxItems: 4
             description: X-offset in arcseconds.
@@ -139,7 +125,6 @@ properties:
             uniqueItems: false
             items:
               type: number
-            default: [0, 0, 0, 0]
             minItems: 4
             maxItems: 4
             description: Y-offset in arcseconds.

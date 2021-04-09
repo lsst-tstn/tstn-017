@@ -1,0 +1,14 @@
+# This is the base (and therefore default) configuration to be used by the ATSpectrograph.
+# This piece contains metadata about the schema itself
+metadata:
+   ticket: DM-24808
+   date_created: 2020-05-24
+   version: v3
+   modifications : Extended maximum linear stage position to support the full range
+   description: >-
+      Contains parameters for ATSpectrograph that are not expected to be modified.
+      Description of each property is found with the schema located in the ts_atspec CSC repository.
+
+# Below are defaults for configurable parameters
+max_pos: 74
+tolerance: 0.01

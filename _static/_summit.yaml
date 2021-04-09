@@ -1,19 +1,18 @@
 # This is the base (and therefore default) configuration to be used by the ATSpectrograph.
 # This piece contains metadata about the schema itself
-ticket: DM-24808
-date_created: 2020-05-24
-version: v3
-modifications : Added central wavelength attribute in filters
-description: >-
-   Contains all parameters for ATSpectrograph, the values expected to change the most regularly are the filter and disperser properties.
-   Description of each property is found with the schema located in the ts_atspec CSC repository.
+metadata:
+   ticket: DM-24808
+   date_created: 2020-05-24
+   version: v3
+   modifications : Added central wavelength attribute in filters to support new ATAOS wavelength dependence functionality
+   description: >-
+      Contains all parameters for ATSpectrograph, the values expected to change the most regularly are the filter and disperser properties.
+      Description of each property is found with the schema located in the ts_atspec CSC repository.
 
-# Below is all of the configurable parameters
+# Below are the site-specific configurable parameters
 instrument_port: 2
 host: 139.229.170.44
 port: 9999
-max_pos: 74
-tolerance: 0.01
 filters:
    filter_name:
       - empty_1
@@ -29,12 +28,12 @@ filters:
       - 0.00
       - 0.00
       - -0.019
-      - -0.016
+      - -0.000
 gratings:
    grating_name:
       - empty_1
       - ronchi90lpmm
-      - empty_3
+      - ronchi90lpmm
       - empty_4
    grating_focus_offset:
       - 0.0
