@@ -9,7 +9,8 @@ metadata:
       Also changed max_pos value because there appears to be an encoder error that occurs near 70mm.
    description: >-
       This file exists to over-ride defaults set in _init.yaml or _<site>.yaml.
-      Usage should be limited as any changes that will persist should be moved into one of the above files.
+      Usage of this file should generally be temporary in nature.
+      Changes that will persist must be moved into one of the above files.
       Any values not explicitly declared here are adopted from the _<site>.yaml file and if not declared there then from the _init.yaml file.
 
 # Begin configuration parameter assignment
