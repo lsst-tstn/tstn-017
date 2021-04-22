@@ -1,19 +1,15 @@
+# This is a configuration override file for values container in _init.yaml or _<site>.yaml,
+# See tstn-020.lsst.io for a description of how to interact with CSC configurations.
 # The first section of this configuration file contains metadata fields specific to this file
 # the fields are used for heritage tracking and knowledge transfer only.
 metadata:
    ticket: DM-24808
    date_created: 2020-05-24
    version: v3
-   modifications : >-
-      Updated filter focus offsets based on new data taken on 2020-03-16, using this to check if sign is correct.
-      Also changed max_pos value because there appears to be an encoder error that occurs near 70mm.
    description: >-
-      This file exists to over-ride defaults set in _init.yaml or _<site>.yaml.
-      Usage of this file should generally be temporary in nature.
-      Changes that will persist must be moved into one of the above files.
-      Any values not explicitly declared here are adopted from the _<site>.yaml file and if not declared there then from the _init.yaml file.
+      Explain what this file is used for and why it exists.
 
-# Begin configuration parameter assignment
+# Begin override configuration parameter assignment
 max_pos: 65
 filters:
    filter_focus_offset:
