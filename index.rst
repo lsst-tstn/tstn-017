@@ -395,7 +395,8 @@ The proposal to improve this aspect of the system is:
 #.  Remove all default values from configuration schema definition in the CSC repository.
 
     - See this :download:`example schema <_static/ATSpectrograph_schema.yaml>` for the ATSpectrograph CSC.
-    - Unit tests will need to utilize configuration files stored in the `tests/data/config` directory as is done for the `ATDome CSC <https://github.com/lsst-ts/ts_ATDome/tree/develop/tests/data/config>`_. See `Salobj documentation <https://ts-salobj.lsst.io>`__) for more details.
+    - Unit tests will need to utilize configuration files stored in the `tests/data/config` directory as is done for the `ATDome CSC <https://github.com/lsst-ts/ts_ATDome/tree/develop/tests/data/config>`_.
+      See `Salobj documentation <https://ts-salobj.lsst.io>`__ for more details.
 
 #.  In the configuration repository for the given CSC (e.g `ts_config_attcs <https://github.com/lsst-ts/ts_config_attcs>`_ for the ATDome) there shall be a ``_init.yaml`` file defining all values that are expected to be common to all sites and/or be relatively static in operations (we intentionally use "_init" instead of "_default").
 
@@ -410,7 +411,7 @@ The proposal to improve this aspect of the system is:
     SalObj determines what site file should be loaded automatically by parsing the ``LSST_DDS_PARTITION_PREFIX`` environment variable
 
     - See this :download:`example _summit.yaml <_static/_summit.yaml>` for the ATSpectrograph CSC.
-    - This file is the second configuration file to get loaded by the CSC and can override any previously declared values.
+    - This file is the second configuration file to get loaded by the CSC and will override any previously declared values.
     - It is not possible to load the ``_<site>.yaml`` file (or any file with a ``_`` prefix) using the ``configurationOverride`` attribute
     - Between this file and the ``_init.yaml`` file, **the configuration must be fully defined**.
 
@@ -428,7 +429,8 @@ The proposal to improve this aspect of the system is:
 
 #.  If a CSC receives a ``start`` command with an empty ``configurationOverride`` (see :ref:`renaming proposal <section-renaming>`) attribute, it shall load the values in ``_init.yaml`` then the site-specific file (e.g. ``_summit.yaml``).
 
-#.  If a CSC receives a ``start`` command with a ``configurationOverride`` attribute equal to a valid filename, it shall load the values in ``_init.yaml``, then then the site-specific file (e.g. ``_summit.yaml``), and lastly the override file. An invalid filename will return as a failed command with an appropriate error message saying the file was not readable and no state transition will occur.
+#.  If a CSC receives a ``start`` command with a ``configurationOverride`` attribute equal to a valid filename, it loads the values in ``_init.yaml``, then the site-specific file (e.g. ``_summit.yaml``), and lastly the override file.
+    An invalid filename will return as a failed command with an appropriate error message saying the file was not readable and no state transition will occur.
 
 #.  The configuration repository shall not contain configurations used for unit testing.
     Configurations needed for unit testing shall be added to the ``test`` directory in the CSC repository and use the override feature in CSCs (see `Salobj documentation <https://ts-salobj.lsst.io>`__).

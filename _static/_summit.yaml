@@ -14,7 +14,6 @@ metadata:
 # Below are the site-specific configurable parameters
 instrument_port: 2
 host: 139.229.170.44
-port: 9999
 filters:
    filter_name:
       - empty_1
@@ -26,11 +25,28 @@ filters:
       - 700
       - 450
       - 840
+   band:
+      - Empty
+      - Empty
+      - Empty
+      - Empty
    filter_focus_offset:
       - 0.00
       - 0.00
       - -0.019
       - -0.000
+  offset_pointing_filter:
+    x:
+      - 0.
+      - 0.
+      - 0.
+      - 0.
+    y:
+      - 0.
+      - 0.
+      - 0.
+      - 0.
+
 gratings:
    grating_name:
       - empty_1
@@ -42,3 +58,14 @@ gratings:
       - -0.026
       - 0.0
       - 0.0
+   offset_pointing_grating:
+      x:
+         - 0.
+         - -10.
+         - -12.
+         - 0.
+      y:
+         - 0.
+         - 2.
+         - 3.
+         - 0.

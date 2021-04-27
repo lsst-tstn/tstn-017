@@ -12,5 +12,11 @@ metadata:
       Description of each property is found with the schema located in the ts_atspec CSC repository.
 
 # Below are defaults for configurable parameters
+host: 127.0.0.1
+port: 9999
+connection_timeout: 60.
+response_timeout: 30.
+move_timeout: 30.
+min_pos: 0.
 max_pos: 74
 tolerance: 0.01
