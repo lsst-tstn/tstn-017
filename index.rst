@@ -335,7 +335,7 @@ Besides the renaming of numerous events and attributes, the most significant cha
 #.  Rename ``settingsVersions`` event to ``configurationsAvailable``.
 
     This topic presents **all** the available configurations that can be loaded by the CSC (see :ref:`the proposal <section-default-configuration>` to change the way CSC handles configuration).
-    As will be discussed in the following section, only the files that override the initial and site specific values will be displayed.
+    As will be discussed in the following section, only the files that override the initial and site-specific values will be displayed.
 
     #.  Remove all notions of labels, including the ``recommendedSettingsLabels`` attribute
     #.  Add a new ``overrides`` attribute
@@ -395,7 +395,7 @@ The proposal to improve this aspect of the system is:
 #.  Remove all default values from configuration schema definition in the CSC repository.
 
     - See this :download:`example schema <_static/ATSpectrograph_schema.yaml>` for the ATSpectrograph CSC.
-    - Unit tests will need to utilize configuration files stored in the `tests/data/config` directory as is done for the `ATDome CSC <https://github.com/lsst-ts/ts_ATDome/tree/develop/tests/data/config>`_.
+    - Unit tests will need to utilize configuration files stored in the `tests/data/config` directory, as is done for the `ATDome CSC <https://github.com/lsst-ts/ts_ATDome/tree/develop/tests/data/config>`_.
       See `Salobj documentation <https://ts-salobj.lsst.io>`__ for more details.
 
 #.  In the configuration repository for the given CSC (e.g `ts_config_attcs <https://github.com/lsst-ts/ts_config_attcs>`_ for the ATDome) there shall be a ``_init.yaml`` file that specifies values that are expected to be common to all sites and/or be relatively static in operations (we intentionally use "_init" instead of "_default").
@@ -406,10 +406,10 @@ The proposal to improve this aspect of the system is:
     - Note that all CSCs having multiple algorithms [2]_, each with different required configuration parameters, must have an initial set of defaults in this file.
 
 #.  Also in the configuration repository for the given CSC, when applicable, there will be a file corresponding to each site where the CSC is used (e.g. ``_summit.yaml, _ncsa.yaml, _base.yaml``).
-    These files contain site specific configuration parameters such as IP addresses and ports.
-    However, if no site-dependent parameters exist for the CSC, then the use of this file is not required.
+    These files contain site-specific configuration parameters such as IP addresses and ports.
+    However, if no site-specific parameters exist for the CSC, then the use of this file is not required.
     Items in the ``_<site>.yaml`` file will override values that may have been declared in the ``_init.yaml`` file
-    SalObj determines what site file should be loaded automatically by parsing the ``LSST_DDS_PARTITION_PREFIX`` environment variable
+    SalObj determines which site-specific file should be loaded automatically by parsing the ``LSST_DDS_PARTITION_PREFIX`` environment variable
 
     - See this :download:`example _summit.yaml <_static/_summit.yaml>` for the ATSpectrograph CSC.
     - This file is the second configuration file to get loaded by the CSC and will override any previously declared values.
@@ -422,7 +422,7 @@ The proposal to improve this aspect of the system is:
     - This file is the third configuration file to get loaded by the CSC and will override any previously declared values.
     - These files are loaded using the ``configurationOverride`` parameter in the ``start`` command
     - These are not expected to be required as part of regular operations and are meant to be used when a non-standard configuration is required
-    - If an override configuration file is also site specific, then a prefix should be added indicating which site it belongs with (e.g. ``summit_reduced_stage_travel.yaml``)
+    - If an override configuration file is also site-specific, then a prefix should be added indicating which site it belongs with (e.g. ``summit_reduced_stage_travel.yaml``)
 
 #.  The labels file, and all notions of labels, shall be deprecated. Only filenames shall be used.
 
@@ -437,9 +437,11 @@ The proposal to improve this aspect of the system is:
 #.  The configuration repository shall not contain configurations used for unit testing.
     Configurations needed for unit testing shall be added to the ``test`` directory in the CSC repository and use the override feature in CSCs (see `Salobj documentation <https://ts-salobj.lsst.io>`__).
 
-#.  Override configurations that are site specific should contain the site name as a prefix to the filename (e.g. ``summit_simple_algorithm.yaml``).
+#.  Override configurations that are site-specific should contain the site name as a prefix to the filename (e.g. ``summit_simple_algorithm.yaml``).
 
 #.  All configuration files shall have a header metadata fields explaining that they are loading basic values from ``_init.yaml``, as shown in the :download:`example configuration file <_static/ATSpectrograph_example_config.yaml>` mentioned above.
+
+#.  Unit or integration tests requiring specific information shall utilize an override file that is specific to the test.
 
 
 .. [2] A schema must be constant; it cannot change as a result of setting configuration values.
@@ -452,12 +454,17 @@ Required Unit and Continuous Integration (CI) Testing
 -----------------------------------------------------
 
 Due to the dependence of the configuration files on the defined schema, which are located in different repositories, CI tests are required to ensure there is no breakage when making modifications in either repository.
+The verification of a configuration requires that the files are syntactically correct and that all fields are populated with correctly formatted values.
+This verification is what is performed in the following tests.
+The validation of a configuration requires that the input values are indeed the correct values required by the user.
+Validation is out of scope for CI tests.
 
 The following CI tests are required on all configuration repos (e.g. ``ts_config_attcs``):
 
-    #. Verify that if location configuration files exist, then they exist for all sites, and the site names are valid.
-    #. Verify that ``_init.yaml``, when used in conjunction with each of the site-dependent configuration files, provides a complete schema
-    #. Verify all configuration files in the configuration repository against the current schema for the associated CSC.
+    #. Verify that if site-specific configuration files exist, then they exist for all sites, and the site names are valid
+    #. Verify that ``_init.yaml`` + ``_<site>.yaml`` results in a complete configuration.
+       This is performed for each site-specific file.
+    #. Verify that ``_init.yaml`` + ``_<site>.yaml`` + ``<override>.yaml`` is valid for all combinations of site and override files.
     #. Verify that new and/or updated configurations have updated metadata
     #. Verify that "default" is never used as a filename
 
