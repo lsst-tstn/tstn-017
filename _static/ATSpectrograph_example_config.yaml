@@ -1,35 +1,19 @@
-# Ticket used to create/modify this file: DM-24808
-# Date created: 2020-05-24
-# Description: Grating and filter offset values based on measurements taken on 2020-03-16.
-# Seeing was very dynamic so expect these values to have errors, exercise will need repeating.
-# Grating offsets assume focusing at filter central wavelengths
-# IMPORTANT: The configuration for this CSC uses the values declared in this file. Any values not explicitly
-#            declared here adopted from the _base.yaml file. Users are expected to only include changes from
-#            the base configuration in this file.
+# This is a configuration override file for values container in _init.yaml or _<site>.yaml,
+# See tstn-020.lsst.io for a description of how to interact with CSC configurations.
+# The first section of this configuration file contains metadata fields specific to this file
+# the fields are used for heritage tracking and knowledge transfer only.
+metadata:
+   ticket: DM-24808
+   date_created: 2020-05-24
+   version: v3
+   description: >-
+      Explain what this file is used for and why it exists.
+
+# Begin override configuration parameter assignment
+max_pos: 65
 filters:
-   filter_name:
-      - empty_1
-      - quadnotch1
-      - BG40
-      - RG610
-   filter_central_wavelength:
-      - 700
-      - 700
-      - 450
-      - 840
    filter_focus_offset:
-      - 0.00
-      - -0.002
+      - 0.123
+      - 0.123
       - -0.019
       - -0.016
-gratings:
-   grating_name:
-      - empty_1
-      - ronchi90lpmm
-      - ronchi170lpmm
-      - empty_4
-   grating_focus_offset:
-      - 0.0
-      - -0.026
-      - -0.026
-      - 0.0
