@@ -50,7 +50,7 @@ Based on the architecture specified in :ref:`LSE-150 <section-lse-150>` :cite:`L
 
 LSE-209 :cite:`LSE-209` specifies the global interface a component must implement to be a valid resource of the system, including a set of events to satisfy the aforementioned configuration requirements, e.g.; ``settingVersions`` and ``settingsApplied`` events.
 At the time of this writing, the information contained in the released version of LSE-209 :cite:`LSE-209` is insufficient to guide the development of the interfaces.
-A `new draft <https://docushare.lsst.org/docushare/dsweb/Get/Version-68709/LSE-209_Draft_v2.docx>`_ is currently with the change control board (LCR-2269) and is expected to be released soon.
+The updated LSE-209 draft can be found as part of the `change control board process (LCR-2764)<https://project.lsst.org/groups/ccb/node/4665>`_ and is expected to be released soon.
 
 The diagram in :numref:`fig-csc-start` illustrates the agreed upon interface for handling CSC configuration and satisfying the system requirements.
 
@@ -324,6 +324,10 @@ Topic and Attribute Renaming
 
 The clarity and purpose of the interface would be improved by some renaming of generic topics and attributes to better reflect their true meaning.
 
+.. note::
+    These changes are being proposed as part of LCR-2764.
+    Upon completion of this LCR, this tech-note will be deprecated and the applicable information will be moved to `a CSC Configuration Manual <tstn-020.lsst.io>`_
+
 For instance, one of the things to point out is the use of words like "recommended" and "settings" in attributes that are related to configuration information.
 Users will usually count on being able to easily enable a component with appropriate defaults first and then, what different configurations they have available to fine tune the behavior of the system.
 The use of *recommended* gives the impression that not everything that is shown is what is available (which is true in some cases), and also means users must look into the configuration repository to know what else is available.
@@ -366,8 +370,8 @@ Besides the renaming of numerous events and attributes, the most significant cha
 
 .. _section-continuous-monitoring:
 
-Monitor of the Configuration Repository
----------------------------------------
+Monitoring of the Configuration Repository
+------------------------------------------
 
 Right now CSCs are required to publish ``configurationsAvailable``  (former ``settingsVersions``, see :ref:`renaming proposal <section-renaming>`) when they transition to ``STANDBY`` state.
 Nevertheless, while in ``STANDBY`` state it is possible for someone to update the available configuration, which would make the information out of sync.
