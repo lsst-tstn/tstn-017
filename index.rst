@@ -6,6 +6,10 @@
 
 .. sectnum::
 
+.. important::
+    This document has been deprecated.
+    Content has been merged into the `CSC Configuration Manual <tstn-020.lsst.io>`_
+
 .. note::
 
    This document is intended for both developers and users of the Vera Rubin observatory control system.
