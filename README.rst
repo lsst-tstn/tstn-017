@@ -1,7 +1,7 @@
 .. image:: https://img.shields.io/badge/tstn--017-lsst.io-brightgreen.svg
    :target: https://tstn-017.lsst.io
-.. image:: https://travis-ci.com/lsst-tstn/tstn-017.svg
-   :target: https://travis-ci.com/lsst-tstn/tstn-017
+.. image:: https://github.com/lsst-tstn/tstn-017/workflows/CI/badge.svg
+   :target: https://github.com/lsst-tstn/tstn-017/actions/
 ..
   Uncomment this section and modify the DOI strings to include a Zenodo DOI badge in the README
   .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.#####.svg
@@ -14,14 +14,14 @@ Handling CSC configuration and ancillary data.
 TSTN-017
 ========
 
-This document consolidates information about how to handle CSC configuration and ancillary data. The focus is on providing basis for development of a unified solution on handling data that is required for proper operation of CSCs in view of the different requirements and use-cases. 
+This document consolidates information about how to handle CSC configuration and ancillary data. The focus is on providing basis for development of a unified solution on handling data that is required for proper operation of CSCs in view of the different requirements and use-cases.
 
 **Links:**
 
 - Publication URL: https://tstn-017.lsst.io
 - Alternative editions: https://tstn-017.lsst.io/v
 - GitHub repository: https://github.com/lsst-tstn/tstn-017
-- Build system: https://travis-ci.com/lsst-tstn/tstn-017
+- Build system: https://github.com/lsst-tstn/tstn-017/actions/
 
 
 Build this technical note
@@ -52,7 +52,7 @@ The `DM reStructuredText Style Guide`_ is a good resource for how we write reStr
 Remember that images and other types of assets should be stored in the ``_static/`` directory of this repository.
 See ``_static/README.rst`` for more information.
 
-The published technote at https://tstn-017.lsst.io will be automatically rebuilt whenever you push your changes to the ``master`` branch on `GitHub <https://github.com/lsst-tstn/tstn-017>`_.
+The published technote at https://tstn-017.lsst.io will be automatically rebuilt whenever you push your changes to the ``main`` branch on `GitHub <https://github.com/lsst-tstn/tstn-017>`_.
 
 Updating metadata
 =================
